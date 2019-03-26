@@ -1,0 +1,288 @@
+\documentclass[11pt]{article}
+
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{xspace}
+\usepackage{theorem}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{url}
+
+
+% This is the stuff for normal spacing
+\makeatletter
+ \setlength{\textwidth}{6.5in}
+ \setlength{\oddsidemargin}{0in}
+ \setlength{\evensidemargin}{0in}
+ \setlength{\topmargin}{0.25in}
+ \setlength{\textheight}{8.25in}
+ \setlength{\headheight}{0pt}
+ \setlength{\headsep}{0pt}
+ \setlength{\marginparwidth}{59pt}
+
+ \setlength{\parindent}{0pt}
+ \setlength{\parskip}{5pt plus 1pt}
+ \setlength{\theorempreskipamount}{5pt plus 1pt}
+ \setlength{\theorempostskipamount}{0pt}
+ \setlength{\abovedisplayskip}{8pt plus 3pt minus 6pt}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document begins here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\headings}[3]{{\large
+{\bf CSE548, AMS542: Analysis of Algorithms, Fall 2017} \hfill {{\bf Date:} #1}\\
+\rule[0.01in]{\textwidth}{0.025in}}
+\begin{center} {{\bf\huge{Homework 4}}\\{\bf( Due: #3 )}} \end{center}
+}
+
+\begin{document}
+
+\headings{Dec 14}{1}{Dec 14}
+\newcommand{\lecnum}{5}  % Lecture Number
+
+
+\vspace{2in}
+
+{\Large
+\begin{center}
+
+{\sc{Group Number:} {\underline{54\hspace{1in}}}}~\\~\\
+
+\scalebox{0.83}{
+\begin{tabular}{||l|c|c||}\hline\hline
+ \multicolumn{3}{||c||}{Group Members}\\ \hline
+Name\hspace{3in}                              &      \hspace{0.5in}SBU ID\hspace{0.5in}     &     \% Contribution \\ \hline\hline
+            Sharad Sridhar        &     111492675   &         33          \\
+                                  &                 &                     \\ \hline
+            Nihal Harish          &     111498545   &         33          \\
+                                  &                 &                     \\ \hline
+            Raunak Shah           &     111511721   &         33          \\
+                                  &                 &                     \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+
+\newpage
+
+{\Large
+\begin{center}
+
+{\sc{\underline{Collaborating Groups}}}~\\
+\vspace{0.25cm}
+\scalebox{0.83}{
+\begin{tabular}{||c|c||}\hline\hline
+Group         &  Specifics \\
+Number        &  (e.g., specific group member? specific task/subtask?) \\ \hline\hline
+              &                                      \\
+ 17            &      \\ 
+              &             Help was taken for TASK 1C                        \\ \hline
+             &        \\
+              &                               \\
+     27         &                 Question 2 was done in collaboration                     \\ \hline
+              &                                       \\
+     35, 17         &               Question 3 was done in collaboration                       \\
+              &                                      \\ \hline
+              &      \\
+              &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+              &                                      \\
+              &                                      \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+
+
+{\Large
+\begin{center}
+
+{\sc{\underline{External Resources Used}}}~\\
+\vspace{0.25cm}
+\scalebox{0.83}{
+\begin{tabular}{||c|c||}\hline\hline
+              &  Specifics \\
+              &   (e.g., cite papers, webpages, etc. and mention why each was used) \\ \hline\hline
+              &                                      \\
+    $1.$      &        Lecture Slides used for study                              \\
+              &                                      \\ \hline
+              &                                      \\
+    $2.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $3.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $4.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $5.$      &                                      \\
+              &                                      \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+\medskip
+
+\medskip
+
+{\bf Task 1}
+
+\textit{Solution for part a}
+
+\medskip
+
+We can parallelize the given algorithm in the following way:
+
+Select$(A[q:r],k)$
+
+1. $n \leftarrow r-q+1$
+
+2. if $n\leq 140 $ then
+
+3. \quad sort$A[q:r]$ and return $A[q+k-1]$
+
+4. else
+
+5. \quad divide A$[q:r]$ into block $B_{i}$'s each containing 5 consecutive elements
+
+\quad \quad \quad (last block may contain fewer than 5 elements)
+
+6. PARALLEL FOR $i \leftarrow 1 \hspace{2mm} to \hspace{2mm} \lceil n/5 \rceil$ do
+
+7. \quad $M[i] \leftarrow \hspace{1mm}$ median of $B_i$ using sorting
+
+8. $x \leftarrow \quad Select(M[1:\lceil n/5\rceil], \lfloor (\lceil n/5 \rfloor + 1)/2 \rceil)$ (median of medians)
+
+9. $t \leftarrow $ Parallel-Partition($A[q:r], x$) (partition around x which ends up at $A[t]$)
+
+10. if $k=t-q+1$, then return $A[t]$
+
+11. else if $k< t-q+1$, then return Select($A[q:t-1,k]$)
+
+12. \quad else return Select($A[t+1:r],k-t+q-1$)
+
+\medskip
+
+We can analyze the Work and Span of this algorithm by looking at the bounds during certain steps in the program. 
+
+Work can be represented as $T(n)$.
+
+Using the already derived (in class) recurrence for a serialized deterministic select algorithm, we have (using the Akra Bazzi method) the result as $\theta(n log n)$ 
+
+The span can be calculated as follows:
+
+Now, the parallel for loop in line 6 will take $\theta(log n)$ time, and the line 9 parallel-partition will take $\theta({log}^2 n)$, which leads us to the fact that at each level of the recursion tree.
+
+The recurrence relation leads to an observation that the problem of size n is divided into two sub-problems of size $(n-{\alpha}_x)$ at each level. The depth of the recursion tree is $\theta ({log} n$. 
+
+This leads to a parallel runtime of $\theta ({log}^3 n)$
+
+Now, the parallelism is $\frac{work}{span} = \frac{\theta(nlogn)}{\theta ({log}^3 n)} = \theta (\frac{n}{{log}^2 n})$
+
+
+
+\medskip
+
+\rule{8cm}{0.4pt}
+
+\medskip
+
+\textit{Solution for part b}
+
+The parallel algorithm for returning the k-th smallest number is as follows:
+
+Par-Randomized-K-Select($A[q:r], k$)
+
+1. $n \leftarrow r - q+1$
+
+2.if $n \leq 30$, then 
+
+3. \quad sort$A[q:r]$ and return $A[q+k-1]$
+
+4. else
+
+5. \quad select a random x from $A[q:r]$
+
+6. \quad $t \leftarrow $ Par-Partition($A[q:r],x$)
+
+7. \quad if $k=t-q+1$, then return $A[t]$
+
+8. \quad else if $k< t-q+1$, then return Par-Randomized-K-Select($A[q:t-1,k]$)
+
+9. \quad \quad else return Par-Randomized-K-Select($A[t+1:r],k-t+q-1$)
+
+Now, similar to the previous question ,we see that for WORK, we have line 6 that does $\theta (n) work$. The depth of the recursion tree for parallel partition is $\theta (logn)$. Thus, same as before we have a work = $\theta(n log n)$.
+
+Now, for Parallelism,
+
+Same as the previous question, we have line 6 doing $\theta({log}^2 n)$ work. The depth of the recursion tree is $\theta (logn)$. This leads us to a SPAN of $\theta ({log}^3 n)$
+
+Now, the parallelism is $\frac{work}{span} = \frac{\theta(nlogn)}{\theta ({log}^3 n)} = \theta (\frac{n}{{log}^2 n})$
+
+\medskip
+
+\rule{8cm}{0.4pt}
+
+\medskip
+
+\textit{Solution for part c}
+
+For this problem, we consider (2k+1) numbers at a time and compare them to the original n numbers. We can do this in parallel. Each processor compares the 2k+1 numbers with the given set of n distinct numbers. Based on the comparison, the appropriate cell is updated with 0 or 1.
+
+Par-k-Smallest($A[q:r],k$)
+
+1. $n\leftarrow r - q+1$
+
+2. if $n\leq 140 $ then
+
+3. \quad sort$A[q:r]$ and return $A[q+k-1]$
+
+4. PARALLEL FOR $i\leftarrow 1$ to $n$ do
+
+5. \quad PARALLEL FOR $j\leftarrow 1$ to $2k+1$ do
+
+6. \quad \quad IF $A[q+i-1]>A[q+j-1]$
+
+7. \quad \quad \quad $COMP[i][j] = 1$
+
+8. \quad \quad ELSE
+
+9. \quad \quad \quad $COMP[i][j] = 0$
+
+10. PARALLEL FOR $i\leftarrow 1$ to $n$ do
+
+11. \quad $C[i] = PREFIX-SUM(COMP[i][],'+')$
+
+12. PARALLEL FOR $i\leftarrow n$ do
+
+13. \quad IF ($C[i] < k$) 
+
+14. \quad \quad $final-result[C[i]] = A[i]$
+
+15. return final-result
+
+
+The extra space is taken as $\theta (nk)$ as is shown by the COMP array.
+
+In serial case, the maximum time is taken by the two nested for loops, one which runs for k times and one which runs for n times. The complexity here is bounded by this which is $\theta(nk)$.
+
+Now, when we analyze the span:
+
+The two parallel for loops take $\theta(logn) time.$
+
+Now in line 10, we have a parallel for loop which will take another $\theta(logn) time$. From the class discussions we have the complexity of PREFIX SUM as $\theta(logn)$. Now this then gives a bounding complexity of $\theta({log}^2 n)$, which is the required result.
+
+Parallelism can be computed as : $\frac{\theta(nk)}{\theta(log^2 n)}$
+
+\end{document} 

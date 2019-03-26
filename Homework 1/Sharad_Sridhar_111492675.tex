@@ -1,0 +1,380 @@
+\documentclass[11pt]{article}
+
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{xspace}
+\usepackage{theorem}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{url}
+
+
+% This is the stuff for normal spacing
+\makeatletter
+ \setlength{\textwidth}{6.5in}
+ \setlength{\oddsidemargin}{0in}
+ \setlength{\evensidemargin}{0in}
+ \setlength{\topmargin}{0.25in}
+ \setlength{\textheight}{8.25in}
+ \setlength{\headheight}{0pt}
+ \setlength{\headsep}{0pt}
+ \setlength{\marginparwidth}{59pt}
+
+ \setlength{\parindent}{0pt}
+ \setlength{\parskip}{5pt plus 1pt}
+ \setlength{\theorempreskipamount}{5pt plus 1pt}
+ \setlength{\theorempostskipamount}{0pt}
+ \setlength{\abovedisplayskip}{8pt plus 3pt minus 6pt}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document begins here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\headings}[3]{{\large
+{\bf CSE548, AMS542: Analysis of Algorithms, Fall 2017} \hfill {{\bf Date:} #1}\\
+\rule[0.01in]{\textwidth}{0.025in}}
+\begin{center} {{\bf\huge{Homework 2}}\\{\bf( Due: #3 )}} \end{center}
+}
+
+\begin{document}
+
+\headings{Nov 11}{1}{Nov 11}
+\newcommand{\lecnum}{5}  % Lecture Number
+
+
+\vspace{2in}
+
+{\Large
+\begin{center}
+
+{\sc{Group Number:} {\underline{54\hspace{1in}}}}~\\~\\
+
+\scalebox{0.83}{
+\begin{tabular}{||l|c|c||}\hline\hline
+ \multicolumn{3}{||c||}{Group Members}\\ \hline
+Name\hspace{3in}                              &      \hspace{0.5in}SBU ID\hspace{0.5in}     &     \% Contribution \\ \hline\hline
+            Sharad Sridhar        &     111492675   &         33          \\
+                                  &                 &                     \\ \hline
+            Nihal Harish          &     111498545   &         33          \\
+                                  &                 &                     \\ \hline
+            Raunak Shah           &     111511721   &         33          \\
+                                  &                 &                     \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+
+\newpage
+
+{\Large
+\begin{center}
+
+{\sc{\underline{Collaborating Groups}}}~\\
+\vspace{0.25cm}
+\scalebox{0.83}{
+\begin{tabular}{||c|c||}\hline\hline
+Group         &  Specifics \\
+Number        &  (e.g., specific group member? specific task/subtask?) \\ \hline\hline
+              &                                      \\
+    41          &      Parts of question 1 was done in collaboration \\
+              &                                      \\ \hline
+              &                                      \\
+       18       &            Help was taken for parts of question 1                          \\
+              &                                      \\ \hline
+              &                                      \\
+              &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+              &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+              &                                      \\
+              &                                      \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+
+
+{\Large
+\begin{center}
+
+{\sc{\underline{External Resources Used}}}~\\
+\vspace{0.25cm}
+\scalebox{0.83}{
+\begin{tabular}{||c|c||}\hline\hline
+              &  Specifics \\
+              &   (e.g., cite papers, webpages, etc. and mention why each was used) \\ \hline\hline
+              &                                      \\
+    $1.$      &        Introduction to Algorithms (general study)                              \\
+              &                                      \\ \hline
+              &                                      \\
+    $2.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $3.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $4.$      &                                      \\
+              &                                      \\ \hline
+              &                                      \\
+    $5.$      &                                      \\
+              &                                      \\ \hline\hline
+\end{tabular}
+}
+\end{center}
+}
+
+\medskip
+
+\medskip
+
+{\bf Task 1}
+
+\textit{Solution for part a}
+
+\medskip
+
+- We can obtain the average number of comparisons by looking at an example. Say, A[1], A[2] and A[3] are all different. The number stored in those variables can be arranged in 3! ways.
+To calculate the median of these three, we'll take a look at the number of comparisons that we must do to find the correct ordering of the numbers. 
+
+Given that the number of comparison operations must be $n - 1/3$, the number of comparisons for $n=3$, should be $8/3$.
+
+Say, the numbers are 1, 2 and 3... 
+Permutations of the numbers and their corresponding comparisons are as follows:
+
+-- (1,2,3) - 3 comparisons
+
+-- (1,3,2) - 3 comparisons
+
+-- (2,1,3) - 2 comparisons
+
+-- (2,3,1) - 2 comparisons
+
+-- (3,1,2) - 3 comparisons
+
+-- (3,2,1) - 3 comparisons
+
+The average number of comparisons are $(3+3+2+2+3+3)/(6) = (16)/(6) = 8/3$ comparisons.
+We can see that the number of comparisons is indeed $n-1/3$
+
+\medskip
+\medskip
+
+\textit{Solution for part b}
+
+- We'll look at cases when $n>=0$. Looking at the case when $n=0$, there will be no numbers to compare so $t_n = 0$. 
+
+- Looking at the case when $n=1$, there is only one number, so no comparisons are involved. Thus $t_n = 0$. These two cases cover $n<2$.
+
+- Looking at the case when $n=2$, there are only two numbers, and only one comparison involved. Hence, $t_n = 1$. This covers $n=2$.
+
+- Looking at the case when $n>2$, we can observe the example detailed above. We need to show that :
+
+$t_n = n - \frac{1}{3} + (\frac{6}{(n)(n-1)(n-2)})(\sum_{k=1}^{n} {(k-1)(n-k)(t_{k-1}+t_{n-k})})$ 
+
+We can see that the first part is obtained by the previous solution. It is just the number of comparisons involved in computing the median of the three numbers, in the average case. This gives us the $n-\frac{1}{3}$ portion.
+
+The next part involves the number of comparisons in the recursion cases. We are splitting the problem set recursively into $k-1$ and $n-k$ subparts are running the same algorithm. We know that the number of ways to permute three numbers is $3! = 6$. The total number of ways to permute these n numbers taking three of them at a time is :
+
+$nP3 = \frac{n!}{(n-3)!} = (n)(n-1)(n-2)$.
+
+So, to obtain the average case, we have the term $\frac{6}{(n)(n-1)(n-2)}$
+
+When we have the an element k as the pivot, we have k-1 elements to the left of it and n-k elements to the right. And, we have to consider the comparisons done on these two portions, which is $t_{k-1}$ and $t_{n-k}$ respectively. The pivot k can range from 1 to n. Thus, we have, on an average, we have: 
+
+$\frac{6}{(n)(n-1)(n-2)})(\sum_{k=1}^{n} {(k-1)(n-k)(t_{k-1}+t_{n-k})}$
+
+\medskip
+\medskip
+
+\textit{Solution for part c}
+
+$T(z) = t_0 + t_1z+t_2z^2+...$
+
+From the previous solution, we know that $t_0 = 0, t_1 = 0$ and $t_2=1$.
+
+Taking these two terms out, we can re-write the original equation as:
+
+$T(z) = 0 + 0 + z^2 + \sum_{n=3}^{\infty} t_nz^n$
+
+Now, we solve the RHS of the given equation.
+
+$\Longrightarrow z^2 + \sum_{n=3}^{\infty} t_nz^n$, (substitute the value of $t_n$) 
+
+$\Longrightarrow z^2 + \sum_{n=3}^{\infty} [(n-\frac{1}{3})+(\frac{12}{(n)(n-1)(n-2)})\sum_{k=1}^{n} {(k-1)(n-k)(t_{k-1}+t_{n-k})}](z^n)$
+
+The last term of the previous equation can be re-written as :
+
+$\sum_{k=1}^{n} {(k-1)(n-k)(t_{k-1}+t_{n-k})} = 2\sum_{k=0}^{n-1} {(k)(n-k-1)(t_k)}$
+
+$\Longrightarrow z^2 + \sum_{n=3}^{\infty} [(n-1/3) + \frac{12}{(n)(n-1)(n-2)}\sum_{k=0}^{n-1} {(k)(n-k-1)(t_k)}](z^n)$
+
+Differentiating this equation, we get $T'(z)$:
+
+$2z + \sum_{n=3}^{\infty} [n(n-1/3) + \frac{12}{(n-1)(n-2)}\sum_{k=0}^{n-1} {(k)(n-k-1)(t_k)}](z^{n-1})$ 
+
+Differentiating this equation, we get $T''(z)$:
+
+$2 + \sum_{n=3}^{\infty} [n(n-1)(n-1/3) + \frac{12}{(n-2)}\sum_{k=0}^{n-1} {(k)(n-k-1)(t_k)}](z^{n-2})$ 
+
+Differentiating this equation, we get $T'''(z)$:
+
+$\sum_{n=3}^{\infty} [n(n-1)(n-2)(n-1/3) + 12\sum_{k=0}^{n-1} {(k)(n-k-1)(t_k)}](z^{n-3})$
+
+$\Longrightarrow \sum_{n=3}^{\infty} n(n-1)(n-2)(n-1/3)(z^{n-3}) + 12\sum_{k=0}^{n-1} \sum_{n=3}^{\infty}{(k)(n-k-1)(t_k)}(z^{n-3})$
+
+We'll solve the given equation in two parts. Looking at the first part, we can write $1/3$ as $3 - 8/3$
+
+$\Longrightarrow \sum_{n=3}^{\infty} n(n-1)(n-2)(n-3)(z^{n-3}) + \sum_{n=3}^{\infty} n(n-1)(n-2)(8/3)(z^{n-3})$
+
+Multiplying and dividing by z for the first term, we get
+
+$\Longrightarrow z\sum_{n=3}^{\infty} n(n-1)(n-2)(n-3)(z^{n-4}) + (8/3)\sum_{n=3}^{\infty} n(n-1)(n-2)(z^{n-3})$
+
+$\Longrightarrow z\sum_{n=3}^{\infty} {\frac{d^4}{dz^4} z^n} + (8/3)\sum_{n=3}^{\infty} {\frac{d^3}{dz^3} z^n}$
+
+$\Longrightarrow z\frac{d^4}{dz^4}[{\frac{1}{1-z}}-{1-z-z^2}] +(8/3)\frac{d^3}{dz^3}[{\frac{1}{1-z}}-{1-z-z^2}]$
+
+$\Longrightarrow z\frac{d^3}{dz^3}[(-1)(1-z)^{-2}(-1)-{0-1-2z}] +(8/3)\frac{d^2}{dz^2}[(-2)(1-z)^{-2}(-1)-{0-1-2z}]$
+
+$\Longrightarrow z\frac{d^2}{dz^2}[2(1-z)^{-3}-2] +(8/3)\frac{d}{dz}[2(1-z)^{-3}-2]$ 
+
+$\Longrightarrow z\frac{d}{dz}[6(1-z)^{-4}] +(8/3)[6(1-z)^{-4}]$
+
+$\Longrightarrow z[24(1-z)^{-5}] +[16(1-z)^{-4}]$
+
+Modifying this, we have the equation as: 
+
+$\Longrightarrow 24/(1-z)^5 - 8/(1-z)^4$
+
+Looking at the 2nd term, we have:
+
+$\sum_{n=3}^{\infty} \sum_{k=1}^{n-1} k(n-k-1)t_kz^{n-3}$
+
+$\Longrightarrow \sum_{k=1}^{\infty} t_kz^{k-1}(n-k-1)(\frac{1}{(1-z)^{2}})$ 
+
+$\Longrightarrow \frac{1}{(1-z)^2}\sum_{k=1}^{\infty} t_kz^{k-1}(n-k-1)$
+
+$\Longrightarrow \frac{1}{(1-z)^2} \sum_{k=1}^{\infty} t_kz^{k-1}(n-1) - \frac{1}{(1-z)^2}\sum_{k=1}^{\infty} kt_kz^{k-1}$
+
+Combining the two parts, we have:
+
+$T'''(z) = \frac{12}{(1-z)^2} T'(z) - 8/(1-z)^4 + 24/(1-z)^5$
+
+which is the required result.
+
+\medskip
+\medskip
+
+\textit{Solution for part d}
+
+We have :
+
+$T'''(z) = \frac{12}{(1-z)^2} T'(z) - 8/(1-z)^4 + 24/(1-z)^5$
+
+$\Longrightarrow (1-z)^2 T'''(z) -12 T'(z) = -8/(1-z)^2 + 24/(1-z)^3$
+
+Integrating both sides, we have:
+
+$\Longrightarrow \int(1-z)^2 T'''(z) -\int12 T'(z) = -\int8/(1-z)^2 + \int24/(1-z)^3$
+
+$\Longrightarrow (1-z)^2T''(z) + \int 2(1-z)T''(z) - 12T(z) = 12/(1-z)^2 - 8/(1-z) + c$
+
+$\Longrightarrow (1-z)^2T''(z) + 2(1-z)T'(z) + 2T(z) - 12T(z) = 12/(1-z)^2 - 8/(1-z) + c$
+
+We know that $T(0) = 0, T'(0) = 0, T'''(0)=2$
+
+Substituting this, we have $c=-2$
+
+Thus the equation can be re-written as:
+
+$\Longrightarrow (1-z)^2T''(z) + 2(1-z)T'(z) + 2T(z) - 12T(z) = 12/(1-z)^2 - 8/(1-z) - 2$
+
+Multiplying throughout by $(1-z)$, we have
+
+$\Longrightarrow (1-z)^3T''(z) + 2(1-z)^2T'(z) -10(1-z)T(z) = 12/(1-z) - 8 - 2(1-z)$
+
+$\Longrightarrow (1-z)^3T''(z) - 3(1-z)^2T'(z) + 5(1-z)^2T'(z) -10(1-z)T(z) = 12/(1-z) - 8 - 2(1-z)$
+
+$\Longrightarrow \frac{d}{dz}{[(1-z)^3T'(z)]} + 5\frac{d}{dz}{[(1-z)^2T(z)]} = 12/(1-z) - 8 - 2(1-z)$
+
+Integrating this, we have:
+
+$\Longrightarrow {[(1-z)^3T'(z)]} + 5{[(1-z)^2T(z)]} = -12ln(1-z) - 8z + (1-z)^2 + c$
+
+To obtain c, we substitute $T(0) =0, T'(0)=0 $
+
+Thus, $c=-1$, and we write the equation as:
+
+$\Longrightarrow {[(1-z)^3T'(z)]} + 5{[(1-z)^2T(z)]} = -12ln(1-z) - 8z + (1-z)^2 -1$
+
+Dividing throughout by $(1-z)^8$, we have:
+
+$\Longrightarrow {[(1-z)^{-5}T'(z)]} + 5{[(1-z)^{-6}T(z)]} = -12ln(1-z)/(1-z)^8 - 8z/(1-z)^8 + (1-z)^{-6} -1/(1-z)^8$
+
+Now, we have:
+
+$\frac{d}{dz}[\frac{T(z)}{(1-z)^5}] = \frac{-12ln(1-z)}{7(1-z)^7} - \int \frac{12}{7(1-z)^8}$
+
+The RHS can be further modified as:
+
+$ = \frac{-12ln(1-z)}{7(1-z)^7} - \frac{12}{49(1-z)^7} - \frac{8z}{7(1-z)^7} + \frac{8}{42(1-z)^7} + \frac{1}{5(1-z)^5}$
+
+$ = \frac{-12ln(1-z)}{7(1-z)^7} - \frac{19}{49(1-z)^7} - \frac{8z}{7(1-z)^7} + \frac{8}{42(1-z)^7} + \frac{1}{5(1-z)^5}$
+
+$ = \frac{-12ln(1-z)}{7(1-z)^7} - \frac{29}{147(1-z)^7} - \frac{28z}{21(1-z)^7} + \frac{1}{5(1-z)^5}$
+
+We know that $T(0)=0$. Thus, after integrating, we have :
+
+$0 = -29/147 -0 +1/5 +c$
+
+$\Longrightarrow c = -2/735$
+
+Thus, we have :
+
+$T(z) = \frac{-3}{7}(4ln(1-z)+28z/9+29/63)(1-z)^{-2} - 2/735(1-z)^5 +1/5$
+
+Which is the required result.
+
+
+\medskip
+\medskip
+
+\textit{Solution for part e}
+
+We are given the solution in the previous problem.
+
+We know that $-ln(1-z) = \sum_{k=1}^{\infty} z^k/k$
+
+Thus, $(1-z)^{-2} = \sum_{j=0}^{\infty} (j+1)z^j$
+
+We now have,
+
+$T(z) = \frac{1}{(1-z)^2} [\frac{12}{7} \sum_{k=2}^{\infty} z^k/k - \frac{28z}{21} -\frac{3*29}{7*63}]$
+
+$ = \frac{12(n+1)}{7}H_n - \frac{24n}{7} - \frac{28n}{21} -\frac{29(n+1)}{147}$
+
+$ = \frac{12(n+1)}{7}H_n - \frac{12n}{7} - \frac{28n}{21} -\frac{29(n+1)}{147}$
+
+$ = \frac{12(n+1)}{7}H_n - \frac{159n}{49} -\frac{29}{147}$
+
+For the last two terms, we are going to simplify it in a similar manner. The 2nd last term has a max coefficient of 5 and the last term has a max coefficient of 0.
+Therefore, we have the last two terms as : 
+
+$(-1)^n\frac{2}{735}(5/n)$ and $\frac{1}{5}(0/n)$
+
+Combining the previous two answers, we have the final answer as:
+
+$\frac{12(n+1)}{7}H_n - \frac{159n}{49} -\frac{29}{147} -(-1)^n\frac{2}{735}(5/n)+\frac{1}{5}(0/n)$ 
+
+Which is the required result
+
+\end{document}
